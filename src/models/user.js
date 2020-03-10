@@ -24,9 +24,14 @@ const userSchema = new mongoose.Schema({
         }
     },
     phone: {
-        type: Number,
+        type: String,
         trim: true,
-        // unique: true
+        // unique: true,
+        validate(v) {
+            if (!validator.isMobilePhone(v,'zh-TW')) {
+                throw new Error('Mobile Phone is invalid');
+            }
+        }
     },
     password: {
         type: String,
@@ -41,6 +46,7 @@ const userSchema = new mongoose.Schema({
     gender: {
         type: String,
         lowercase: true,
+        enum: ['male', 'female', 'other']
     },
     birthday: { //ISO
         type: String,
