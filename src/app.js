@@ -1,5 +1,5 @@
 const express = require('express');
-require('./db/mongoose'); //connect MongoDB
+require('./db/mongoose'); //connect MongoDB  /Users/markchen83115/mongodb/bin/mongod --dbpath=/Users/markchen83115/mongodb-data
 const User = require('./models/user');
 
 const app = express();
@@ -13,7 +13,8 @@ app.post('/users', async(req, res) => {
 
     try {
         await user.save();
-        res.status(201).send(user);
+        const token = await user.generateAuthToken();
+        res.status(201).send({ user, token });
     } catch (e) {
         res.status(400).send(e);
     }
@@ -35,10 +36,6 @@ app.get('/user/:id', async (req, res) => {
         res.status(500).send();
     }
 });
-
-
-
-
 
 
 app.listen(port, () => {
