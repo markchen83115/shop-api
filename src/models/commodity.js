@@ -19,9 +19,10 @@ const commoditySchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true,
+        min: 1,
         validate(v) {
-            if (!validator.isInt(v, {min: 1})) {
-                throw new Error('Price must >1');
+            if (!validator.isInt(v.toString())) {
+                throw new Error('Price must be integer');
             }
         }
     },
@@ -29,7 +30,7 @@ const commoditySchema = new mongoose.Schema({
         type: Number,
         required: true,
         validate(v) {
-            if (!validator.isInt(v,)) {
+            if (!validator.isInt(v.toString())) {
                 throw new Error('Stock must be integer');
             }
         }
