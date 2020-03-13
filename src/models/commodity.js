@@ -29,6 +29,7 @@ const commoditySchema = new mongoose.Schema({
     stock: {
         type: Number,
         required: true,
+        min: 0,
         validate(v) {
             if (!validator.isInt(v.toString())) {
                 throw new Error('Stock must be integer');

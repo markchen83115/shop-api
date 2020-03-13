@@ -64,25 +64,48 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-//generateAuthToken()  create Token
+// generateAuthToken() 產生新的token
 userSchema.methods.generateAuthToken = async function() {
-    const token = jwt.sign({ _id: this.id.toString() }, 'markchen83115', { expiresIn: '7 days' });
+    const token = jwt.sign({ _id: this.id.toString() }, 'secret', { expiresIn: '7 days' });
     this.tokens.push({ token });
     await this.save();
     return token;
 };
 
-//middleware - hash password, ISO birthday before save()
-userSchema.pre('save', async function(next) {
-    const user = this; //avoid point to global variables
+// findByCredentials 驗證login資訊
+userSchema.statics.findByCredentials = async (account, password) => {
 
-    if (user.isModified('password')) {
-        user.password = await bcrypt.hash(user.password, 8);
+    // 透過email資料在mongodb搜尋user
+    const user = await User.findOne({ account });
+
+    // 找不到user則回傳無法登入
+    if (!user) {
+        throw new Error('Unable to login');
     }
 
-    if (user.isModified('birthday')) {
-        const birthday = moment(user.birthday, "YYYY-MM-DD");
-        user.birthday = birthday.toISOString();
+    // 驗證密碼
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    // 密碼錯誤則回傳無法登入
+    if (!isMatch) {
+        throw new Error('Unable to login');
+    }
+
+    return user;
+};
+
+// save之前 先處理資料
+userSchema.pre('save', async function (next) {
+    
+    // hash password
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 8);
+    }
+
+    // birthday 轉換為ISO
+    if (this.isModified('birthday')) {
+        const birthday = moment(this.birthday, "YYYY-MM-DD");
+        this.birthday = birthday.toISOString();
     }
     next();
 });
