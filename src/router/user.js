@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+const sharp = require('sharp');
 const User = require('../models/user');
 const authToken = require('../middleware/authToken');
 
@@ -10,9 +12,7 @@ router.post('/users', async(req, res) => {
     try {
         // 儲存user資料, 並產生新的token
         await user.save();
-        console.log('a');
         const token = await user.generateAuthToken();
-        console.log('b');
         res.status(201).send({ user, token });
     } catch (e) {
         res.status(400).send(e);
@@ -28,7 +28,30 @@ router.post('/users/login', async (req, res) => {
     } catch (e) {
         res.status(400).send();
     }
-    
+});
+
+// user登出
+router.post('/users/logout', authToken, async (req, res) => {
+    try {
+        // 移除現有的token並存檔
+        req.user.tokens = req.user.tokens.filter((t) => t.token !== req.token);
+        await req.user.save();
+        res.send();
+    } catch (e) {
+        res.status(500).send();
+    }
+});
+
+// user清除所有token
+router.post('/users/logoutAll', authToken, async (req, res) => {
+    try {
+        // 清除所有tokens並存檔
+        req.user.tokens = [];
+        await req.user.save();
+        res.send();
+    } catch (e) {
+        res.status(500).send();
+    }
 });
 
 // 獲取user自己的資料 會先驗證token
@@ -59,6 +82,52 @@ router.patch('/users/me', authToken, async (req, res) => {
     }
 });
 
+// 刪除user
+router.delete('/users/me', authToken, async (req, res) => {
+    try {
+        await req.user.remove();
+        res.send(req.user);
+    } catch (e) {
+        res.status(500).send();
+    }
+});
+
+// multer設定 上傳檔案
+const upload = multer({
+    // 檔案大小限制1MB
+    limits: { fieldSize: 1000000 },
+    // 限制檔案類型 jpg, jpeg, png
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Please upload a jpg, jpeg, png file'));
+        }
+        cb(undefined, true);
+    }
+});
+
+// 上傳個人頭像
+router.post('/users/me/avatar', authToken, upload.single('avatar'), async (req, res) => { // upload.single('avatar'): avatar代表的是Json裡面的key
+    // 裁減圖片大小+設定為png檔
+    const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer();
+    req.user.avatar = buffer;
+    await req.user.save();
+    res.send();
+
+    // Express error handler
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+});
+
+//刪除個人頭像
+router.delete('/users/me/avatar', authToken, async (req, res) => {
+    try {
+        req.user.avatar = undefined;
+        await req.user.save();
+        res.send(); 
+    } catch (e) {
+        res.status(500).send();
+    }
+});
 
 
 module.exports = router;

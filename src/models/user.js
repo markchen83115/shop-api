@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     account: {
         type: String,
         required: true,
-        trim: true,
+        trim: true
         // unique: true
     },
     email: {
@@ -49,14 +49,14 @@ const userSchema = new mongoose.Schema({
         enum: ['male', 'female', 'other']
     },
     birthday: { //ISO
-        type: String,
+        type: String
     },
     avatar: {
         type: Buffer
     },
     tokens: [{
         token: {
-            type: String,
+            type: String
             // required: true
         }
     }]
@@ -100,12 +100,6 @@ userSchema.pre('save', async function (next) {
     // hash password
     if (this.isModified('password')) {
         this.password = await bcrypt.hash(this.password, 8);
-    }
-
-    // birthday 轉換為ISO
-    if (this.isModified('birthday')) {
-        const birthday = moment(this.birthday, "YYYY-MM-DD");
-        this.birthday = birthday.toISOString();
     }
     next();
 });
