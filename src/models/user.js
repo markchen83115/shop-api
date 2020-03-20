@@ -8,15 +8,15 @@ const userSchema = new mongoose.Schema({
     account: {
         type: String,
         required: true,
-        trim: true
-        // unique: true
+        trim: true,
+        unique: true
     },
     email: {
         type: String,
         required: true,
         trim: true,
         lowercase: true,
-        // unique: true,
+        unique: true,
         validate(value) {
             if (!validator.isEmail(value)) {
                 throw new Error('Email is invalid');
@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: String,
         trim: true,
-        // unique: true,
+        unique: true,
         validate(v) {
             if (!validator.isMobilePhone(v,'zh-TW')) {
                 throw new Error('Mobile Phone is invalid');
@@ -56,13 +56,28 @@ const userSchema = new mongoose.Schema({
     },
     tokens: [{
         token: {
-            type: String
-            // required: true
+            type: String,
         }
     }]
 }, {
     timestamps: true
 });
+
+// 虛擬欄位 commodity --> 抓取user產生的commodity --> 透過populate()
+userSchema.virtual('commodity', {
+    ref: 'Commodity',
+    localField: '_id',
+    foreignField: 'owner'
+});
+
+// 管理res.send出現的屬性: password不顯示
+userSchema.methods.toJSON = function () {
+    const userObject = this.toObject();
+
+    //delete userObject.photo;
+
+    return userObject;
+};
 
 // generateAuthToken() 產生新的token
 userSchema.methods.generateAuthToken = async function() {

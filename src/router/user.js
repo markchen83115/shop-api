@@ -6,6 +6,19 @@ const authToken = require('../middleware/authToken');
 
 const router = new express.Router();
 
+// multer設定 上傳檔案
+const upload = multer({
+    // 檔案大小限制1MB
+    limits: { fieldSize: 1000000 },
+    // 限制檔案類型 jpg, jpeg, png
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Please upload a jpg, jpeg, png file'));
+        }
+        cb(undefined, true);
+    }
+});
+
 // 建立新user
 router.post('/users', async(req, res) => {
     const user = new User(req.body);
@@ -62,12 +75,12 @@ router.get('/users/me', authToken, async (req, res) => {
 
 // 更新user資料 先驗證token
 router.patch('/users/me', authToken, async (req, res) => {
-    // 只能更新 'email', 'password', 'phone', 'name', 'gender', 'birthday', 'avatar'
+    // 只能更新 'email', 'password', 'phone', 'name', 'gender', 'birthday'
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['email', 'password', 'phone', 'name', 'gender', 'birthday', 'avatar'];
+    const allowedUpdates = ['email', 'password', 'phone', 'name', 'gender', 'birthday'];
     const isValidUpdates = updates.every((update) => allowedUpdates.includes(update));
 
-    // 無法更新未包含的資料
+    // 無法更新 無效屬性
     if (!isValidUpdates) {
         res.status(400).send({ error: 'invalid updates' });
     }
@@ -92,22 +105,9 @@ router.delete('/users/me', authToken, async (req, res) => {
     }
 });
 
-// multer設定 上傳檔案
-const upload = multer({
-    // 檔案大小限制1MB
-    limits: { fieldSize: 1000000 },
-    // 限制檔案類型 jpg, jpeg, png
-    fileFilter(req, file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-            return cb(new Error('Please upload a jpg, jpeg, png file'));
-        }
-        cb(undefined, true);
-    }
-});
-
 // 上傳個人頭像
 router.post('/users/me/avatar', authToken, upload.single('avatar'), async (req, res) => { // upload.single('avatar'): avatar代表的是Json裡面的key
-    // 裁減圖片大小+設定為png檔
+    // resize(裁剪圖片大小) --> png(轉換為png檔) --> toBuffer(轉變資料型態為buffer) 
     const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer();
     req.user.avatar = buffer;
     await req.user.save();

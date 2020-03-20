@@ -36,17 +36,26 @@ const commoditySchema = new mongoose.Schema({
             }
         }
     },
-    photo: [{
+    photo: {
         type: Buffer
-    }],
+    },
     owner: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
     }
 }, {
     timestamps: true
 });
+
+// 管理res.send出現的屬性: photo不顯示
+commoditySchema.methods.toJSON = function () {
+    const commodityObject = this.toObject();
+
+    delete commodityObject.photo;
+
+    return commodityObject;
+};
 
 const Commodity = mongoose.model('Commodity', commoditySchema);
 
