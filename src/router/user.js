@@ -82,7 +82,7 @@ router.patch('/users/me', authToken, async (req, res) => {
 
     // 無法更新 無效屬性
     if (!isValidUpdates) {
-        res.status(400).send({ error: 'invalid updates' });
+        return res.status(400).send({ error: 'invalid updates' });
     }
 
     try {
@@ -126,6 +126,22 @@ router.delete('/users/me/avatar', authToken, async (req, res) => {
         res.send(); 
     } catch (e) {
         res.status(500).send();
+    }
+});
+
+//讓使用者可以獲取自己的頭像
+router.get('/users/:id/avatar', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (!user || !user.avatar) {
+            throw new Error();
+        }
+        
+        res.set('Content-Type', 'image/png');
+        res.send(user.avatar);
+    } catch (e) {
+        res.status(404).send();
     }
 });
 

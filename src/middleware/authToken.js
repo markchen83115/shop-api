@@ -5,7 +5,7 @@ const authToken = async (req, res, next) => {
     try {
         // 處理從http header獲取的token, 並解構token得到user id, 從DB中撈出user資料
         const token = req.header('Authorization').replace('Bearer ', '');
-        const decode = jwt.verify(token, 'secret');
+        const decode = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findOne({ _id: decode._id, 'tokens.token': token });
 
         // 找不到user資料
@@ -21,7 +21,7 @@ const authToken = async (req, res, next) => {
     } catch (e) {
 
         // 認證失敗
-        res.status(401).send({ error: 'Please authenticate.' });
+        res.status(401).send({ error: 'Please authenticate' });
     }
 };
 

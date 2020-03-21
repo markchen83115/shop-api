@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 //connect MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/yochen-website', {
+mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true

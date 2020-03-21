@@ -70,18 +70,21 @@ userSchema.virtual('commodity', {
     foreignField: 'owner'
 });
 
-// 管理res.send出現的屬性: password不顯示
+// 管理res.send出現的屬性
 userSchema.methods.toJSON = function () {
     const userObject = this.toObject();
 
-    //delete userObject.photo;
+    //不顯示passwrod, tokens, avatar
+    delete userObject.password;
+    delete userObject.tokens;
+    delete userObject.avatar;
 
     return userObject;
 };
 
 // generateAuthToken() 產生新的token
 userSchema.methods.generateAuthToken = async function() {
-    const token = jwt.sign({ _id: this.id.toString() }, 'secret', { expiresIn: '7 days' });
+    const token = jwt.sign({ _id: this.id.toString() }, process.env.JWT_SECRET, { expiresIn: '7 days' });
     this.tokens.push({ token });
     await this.save();
     return token;

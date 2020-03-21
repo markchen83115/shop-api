@@ -48,13 +48,13 @@ router.patch('/commodity/:id', authToken, upload.single('photo'), async(req, res
 
         // 無法更新 無效屬性
         if (!isValidUpdates) {
-            res.status(400).send({ error: 'Invalid update' });
+            return res.status(400).send({ error: 'Invalid update' });
         }
         
         const commodity = await Commodity.findById(req.params.id);
         // 如果找不到商品
         if (!commodity) {
-            res.staus(404).send();
+            return res.staus(404).send();
         }
 
         // 更新資料
@@ -83,7 +83,7 @@ router.delete('/commodity/:id', authToken, async (req, res) => {
 
         // 若找不到商品
         if (!commodity) {
-            res.status(404).send();
+            return res.status(404).send();
         }
         res.send(commodity);
     } catch (e) {
