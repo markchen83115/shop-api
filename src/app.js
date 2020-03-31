@@ -1,13 +1,27 @@
 const express = require('express');
-require('./db/mongoose'); //connect MongoDB  /Users/markchen83115/mongodb/bin/mongod --dbpath=/Users/markchen83115/mongodb-data
-const userRouter = require('./router/user');
-const commodityRouter = require('./router/commodity');
+const path = require('path');
+const userAPIRouter = require('./router/userAPI');
+const commodityAPIRouter = require('./router/commodityAPI');
+const shopWebRouter = require('./router/shopWeb');
+
+// 連接mongodb
+require('./db/mongoose'); // /Users/markchen83115/mongodb/bin/mongod --dbpath=/Users/markchen83115/mongodb-data
 
 const app = express();
-
 app.use(express.json());//auto parse Json from client side
 
-app.use(userRouter);
-app.use(commodityRouter);
+// 定義路徑
+const publicDirectoryPath = path.join(__dirname, '../public');
+const viewsPath = path.join(__dirname, '../templates/views');
+
+// 設定ejs
+app.set('view engine', 'ejs');
+app.set('views', viewsPath);
+app.use(express.static(publicDirectoryPath));
+
+// URL
+app.use(userAPIRouter);
+app.use(commodityAPIRouter);
+app.use(shopWebRouter);
 
 module.exports = app;

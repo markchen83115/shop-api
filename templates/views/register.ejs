@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>註冊</title>
+    <!-- bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container"> 
+    <form id="register">
+      <h1>註冊</h1>
+      <div class="form-group">
+        <label for="account">帳號:</label>
+        <input type="text" class="form-control" id="account" aria-describedby="emailHelp">
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+      </div>
+      <div class="form-group">
+        <label for="phone">手機:</label>
+        <input type="text" class="form-control" id="phone" aria-describedby="emailHelp">
+      </div>
+      <div class="form-group">
+        <label for="password">密碼:</label>
+        <input type="password" class="form-control" id="password">
+      </div>
+      <div class="form-group">
+        <label for="name">姓名:</label>
+        <input type="text" class="form-control" id="name">
+      </div>
+      <fieldset class="form-group">
+        <div class="row">
+          <legend class="col-form-label col-sm-1 pt-0">性別:</legend>
+          <div class="col-sm-10">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+              <label class="form-check-label" for="male">
+                男
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+              <label class="form-check-label" for="female">
+                女
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gender" id="other" value="other" checked>
+              <label class="form-check-label" for="other">
+                其他
+              </label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="form-row">
+        <legend class="col-form-label col-sm-1 pt-4">出生日期:</legend>
+        <div class="form-group">
+          <label for="birthdayYear">年</label>
+          <select class="form-control" id="birthdayYear">
+            <option value="na">Year</option>
+            <% for(let i = 1920; i <= 2020; i++ ) { %>
+              <option value="<%= i %>"><%= i %></option>
+            <% }; %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="birthdayMonth">月</label>
+          <select class="form-control" id="birthdayMonth">
+            <option value="na">Month</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="birthdayDay">日</label>
+          <select class="form-control" id="birthdayDay">
+            <option value="na">Day</option>
+            <% for(let i = 1; i <= 31; i++) { %>
+            <option value=<%= i %>><%= i %></option>
+            <% } %>
+          </select>
+        </div>
+      </div>
+      
+      
+  
+      <button type="submit" class="btn btn-primary">註冊</button>
+    </form>
+  </div>
+  
+
+    <!-- register.js -->
+    <script src="/js/register.js"></script>
+      
+    <!-- bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
