@@ -10,11 +10,11 @@ const commoditySchema = new mongoose.Schema({
     description: {
         type: String,
         maxlength: 3000,
-        required: true
+        default: '無'
     },
     material: {
         type: String,
-        required: true
+        default: '無'
     },
     price: {
         type: Number,
@@ -49,13 +49,13 @@ const commoditySchema = new mongoose.Schema({
 });
 
 // 管理res.send出現的屬性: photo不顯示
-commoditySchema.methods.toJSON = function () {
-    const commodityObject = this.toObject();
+// commoditySchema.methods.toJSON = function () {
+//     const commodityObject = this.toObject();
 
-    delete commodityObject.photo;
+//     delete commodityObject.photo;
 
-    return commodityObject;
-};
+//     return commodityObject;
+// };
 
 const Commodity = mongoose.model('Commodity', commoditySchema);
 

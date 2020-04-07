@@ -74,25 +74,35 @@ router.get('/users/me', authToken, async (req, res) => {
 });
 
 // 更新user資料 先驗證token
-router.patch('/users/me', authToken, async (req, res) => {
+router.patch('/users/me', authToken, upload.single('avatar'), async (req, res) => {
     // 只能更新 'email', 'password', 'phone', 'name', 'gender', 'birthday'
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['email', 'password', 'phone', 'name', 'gender', 'birthday'];
+    const allowedUpdates = ['email', 'password', 'phone', 'name', 'gender', 'birthday', 'avatar'];
     const isValidUpdates = updates.every((update) => allowedUpdates.includes(update));
 
     // 無法更新 無效屬性
     if (!isValidUpdates) {
         return res.status(400).send({ error: 'invalid updates' });
-    }
+    };
 
     try {
         // 根據使用者傳送的資料進行更新並儲存
         updates.forEach((update) => req.user[update] = req.body[update]);
+
+        // 如果有上傳圖片
+        if (req.file) {
+            // resize(裁剪圖片大小) --> png(轉換為png檔) --> toBuffer(轉變資料型態為buffer) 
+            const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer();
+            req.user.avatar = buffer;
+        };
+
         await req.user.save();
         res.send(req.user);
     } catch (e) {
         res.status(400).send(e);
     }
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
 });
 
 // 刪除user

@@ -18,9 +18,6 @@ const getRVBN = (rName) => {
     return '';
 };
 
-//messageOne.textContent = 'From JavaScript'; //更改index <p>的內容
-
-
 registerForm.addEventListener('submit', async (e) => {
     // 讓瀏覽器不重新刷新
     e.preventDefault();
@@ -44,7 +41,19 @@ registerForm.addEventListener('submit', async (e) => {
             'Content-Type': 'application/json'
         }
     });
-    const responseUser = await response.json();
-    localStorage.setItem('token', responseUser.token);
-    console.log(localStorage.getItem('token'));
+
+    const responseJson = await response.json();
+
+    // 若回傳201 成功新增
+    if (response.status === 201) {
+        localStorage.removeItem('jwtToken');
+        localStorage.setItem('jwtToken', responseJson.token);
+        console.log('Token: ', localStorage.getItem('jwtToken'));
+        console.log(responseJson);
+        alert('成功創建帳號');
+    // 若回傳400
+    } else if (response.status === 400) {
+        // console.log(responseUser)
+        alert(responseJson.errmsg);
+    }; 
 });

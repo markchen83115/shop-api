@@ -21,7 +21,16 @@ loginForm.addEventListener('submit', async (e) => {
             'Content-Type': 'application/json'
         }
     });
-    const responseUser = await response.json();
-    localStorage.setItem('token', responseUser.token);
-    console.log(localStorage.getItem('token'));
+    
+    if (response.status === 200) {
+        const responseJson = await response.json();
+        localStorage.removeItem('jwtToken');
+        localStorage.setItem('jwtToken', responseJson.token);
+        console.log(localStorage.getItem('jwtToken'));
+        alert('登入成功');
+    } else {
+        alert('登入失敗, 請重新嘗試')
+    }
+
+    
 });

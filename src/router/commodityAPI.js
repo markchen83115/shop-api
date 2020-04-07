@@ -160,5 +160,20 @@ router.get('/commodityUser/', authToken, async (req, res) => {
     }    
 });
 
+// 取得特定商品的圖片
+router.get('/commodity/:id/photo', async (req, res) => {
+    try {
+        const commodity = await Commodity.findById(req.params.id);
+
+        if (!commodity || !commodity.photo) {
+            throw new Error();
+        }
+        
+        res.set('Content-Type', 'image/png');
+        res.send(commodity.photo);
+    } catch (e) {
+        res.status(404).send();
+    }
+});
 
 module.exports = router;
