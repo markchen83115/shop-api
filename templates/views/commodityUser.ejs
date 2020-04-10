@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <title>個人商品</title>
+    <!-- bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <!-- navbar -->
+    <%- include ("../partials/navbar.ejs") %>
+
+    <!-- 放置商品的div -->
+    <div class="row row-cols-1 row-cols-md-3" id="commodity">
+        
+        <!-- 透過mustache來顯示商品 -->
+        <script id="commodity-template" type="text/html">
+            <div class="col mb-4" onclick="location.href='/commodityMod/{{_id}}';" id="{{_id}}">
+                <div class="card">
+                    <img src="{{photoAPI}}" class="img-thumbnail rounded mx-auto d-block" alt="無圖片" width="150" height="150">
+                    <div class="card-body">
+                    <h5 class="card-title">{{name}}</h5>
+                    <p class="card-text">描述: {{description}}</p>
+                    <p class="card-text">材質: {{material}}</p>
+                    <p class="card-text">商品價格: {{price}}</p>
+                    <p class="card-text">商品數量: {{stock}}</p>
+                    </div>
+                </div>
+            </div>            
+        </script>
+    </div>
+
+
+
+    <!-- bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- mustache.js -->
+    <script src="https://unpkg.com/mustache@latest"></script>
+
+    <!-- commodityUser.js -->
+    <script src="/js/commodityUser.js"></script>
+
+</body>
+</html>

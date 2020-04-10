@@ -20,7 +20,7 @@ const upload = multer({
 });
 
 // 建立新user
-router.post('/users', async(req, res) => {
+router.post('/api/users', async(req, res) => {
     const user = new User(req.body);
     try {
         // 儲存user資料, 並產生新的token
@@ -33,7 +33,7 @@ router.post('/users', async(req, res) => {
 });
 
 // user登入
-router.post('/users/login', async (req, res) => {
+router.post('/api/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.account, req.body.password);
         const token = await user.generateAuthToken();
@@ -44,7 +44,7 @@ router.post('/users/login', async (req, res) => {
 });
 
 // user登出
-router.post('/users/logout', authToken, async (req, res) => {
+router.post('/api/users/logout', authToken, async (req, res) => {
     try {
         // 移除現有的token並存檔
         req.user.tokens = req.user.tokens.filter((t) => t.token !== req.token);
@@ -56,7 +56,7 @@ router.post('/users/logout', authToken, async (req, res) => {
 });
 
 // user清除所有token
-router.post('/users/logoutAll', authToken, async (req, res) => {
+router.post('/api/users/logoutAll', authToken, async (req, res) => {
     try {
         // 清除所有tokens並存檔
         req.user.tokens = [];
@@ -68,13 +68,13 @@ router.post('/users/logoutAll', authToken, async (req, res) => {
 });
 
 // 獲取user自己的資料 會先驗證token
-router.get('/users/me', authToken, async (req, res) => {
+router.get('/api/users/me', authToken, async (req, res) => {
     // user資料已從authToken回傳至req.user
     res.send(req.user);
 });
 
 // 更新user資料 先驗證token
-router.patch('/users/me', authToken, upload.single('avatar'), async (req, res) => {
+router.patch('/api/users/me', authToken, upload.single('avatar'), async (req, res) => {
     // 只能更新 'email', 'password', 'phone', 'name', 'gender', 'birthday'
     const updates = Object.keys(req.body);
     const allowedUpdates = ['email', 'password', 'phone', 'name', 'gender', 'birthday', 'avatar'];
@@ -106,7 +106,7 @@ router.patch('/users/me', authToken, upload.single('avatar'), async (req, res) =
 });
 
 // 刪除user
-router.delete('/users/me', authToken, async (req, res) => {
+router.delete('/api/users/me', authToken, async (req, res) => {
     try {
         await req.user.remove();
         res.send(req.user);
@@ -116,7 +116,7 @@ router.delete('/users/me', authToken, async (req, res) => {
 });
 
 // 上傳個人頭像
-router.post('/users/me/avatar', authToken, upload.single('avatar'), async (req, res) => { // upload.single('avatar'): avatar代表的是Json裡面的key
+router.post('/api/users/me/avatar', authToken, upload.single('avatar'), async (req, res) => { // upload.single('avatar'): avatar代表的是Json裡面的key
     // resize(裁剪圖片大小) --> png(轉換為png檔) --> toBuffer(轉變資料型態為buffer) 
     const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer();
     req.user.avatar = buffer;
@@ -129,7 +129,7 @@ router.post('/users/me/avatar', authToken, upload.single('avatar'), async (req, 
 });
 
 //刪除個人頭像
-router.delete('/users/me/avatar', authToken, async (req, res) => {
+router.delete('/api/users/me/avatar', authToken, async (req, res) => {
     try {
         req.user.avatar = undefined;
         await req.user.save();
@@ -140,7 +140,7 @@ router.delete('/users/me/avatar', authToken, async (req, res) => {
 });
 
 //讓使用者可以獲取自己的頭像
-router.get('/users/:id/avatar', async (req, res) => {
+router.get('/api/users/:id/avatar', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
 

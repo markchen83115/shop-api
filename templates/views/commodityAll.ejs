@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html >
 <head>
-    <title>個人商品</title>
+    <title>商品</title>
     <!-- bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
@@ -14,7 +14,7 @@
         
         <!-- 透過mustache來顯示商品 -->
         <script id="commodity-template" type="text/html">
-            <div class="col mb-4">
+            <div class="col mb-4" onclick="location.href='/commodity/{{_id}}';" id="{{_id}}">
                 <div class="card">
                     <img src="{{photoAPI}}" class="img-thumbnail rounded mx-auto d-block" alt="無圖片" width="150" height="150">
                     <div class="card-body">
@@ -25,7 +25,7 @@
                     <p class="card-text">商品數量: {{stock}}</p>
                     </div>
                 </div>
-            </div>            
+            </div>
         </script>
     </div>
 
@@ -39,8 +39,8 @@
     <!-- mustache.js -->
     <script src="https://unpkg.com/mustache@latest"></script>
 
-    <!-- newCommodity.js -->
-    <script src="/js/userCommodity.js"></script>
+    <!-- commodityAll.js -->
+    <script src="/js/commodityAll.js"></script>
 
 </body>
 </html>

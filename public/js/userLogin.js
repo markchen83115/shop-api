@@ -14,7 +14,7 @@ loginForm.addEventListener('submit', async (e) => {
     };
 
     // 呼叫API-建立使用者
-    const response = await fetch('/users/login', {
+    const response = await fetch('/api/users/login', {
         method: 'POST',
         body: JSON.stringify(loginData),
         headers: {

@@ -1,5 +1,6 @@
 // 對應form的欄位
-const userProfile = document.querySelector('#userProfile');
+const updateUser = document.querySelector('#updateUser');
+const deleteUser = document.querySelector('#deleteUser');
 const account = document.querySelector('#account');
 const email = document.querySelector('#email');
 const phone = document.querySelector('#phone');
@@ -23,7 +24,7 @@ const getRVBN = (rName) => {
 
 // 從server取得使用者資料
 const getUserProfile = async () => {
-    const response = await fetch('/users/me', {
+    const response = await fetch('/api/users/me', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -58,11 +59,11 @@ const getUserProfile = async () => {
         }
     }
     // 顯示個人照片
-    imgAvatar.src = `/users/${responseUser._id}/avatar`;
+    imgAvatar.src = `/api/users/${responseUser._id}/avatar`;
 };
 
 // 更新使用者資料
-userProfile.addEventListener('submit', async (e) => {
+updateUser.addEventListener('click', async (e) => {
     // 讓瀏覽器不重新刷新
     e.preventDefault();
 
@@ -78,7 +79,7 @@ userProfile.addEventListener('submit', async (e) => {
     }
 
     // 呼叫API-建立使用者
-    const response = await fetch('/users/me', {
+    const response = await fetch('/api/users/me', {
         method: 'PATCH',
         body: formData,
         headers: {
@@ -88,10 +89,35 @@ userProfile.addEventListener('submit', async (e) => {
 
     // API結果回傳
     if (response.status === 401) {
-        document.location.href="/unauthorized";
+        document.location.href="/userUnauthorized";
     } else if (response.status === 200) {
         alert('更新資料成功');
         document.location.href="/userProfile";
+    } else {
+        const responseJson = await response.json();
+        alert(responseJson.error);
+    }
+});
+
+// 刪除使用者
+deleteUser.addEventListener('click', async (e) => {
+    // 讓瀏覽器不重新刷新
+    e.preventDefault();
+
+    // 呼叫API-建立使用者
+    const response = await fetch('/api/users/me', {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+        }
+    });
+
+    // API結果回傳
+    if (response.status === 401) {
+        document.location.href="/userUnauthorized";
+    } else if (response.status === 200) {
+        alert('刪除使用者成功');
+        document.location.href="/commodityAll";
     } else {
         const responseJson = await response.json();
         alert(responseJson.error);

@@ -52,7 +52,7 @@ newCommodity.addEventListener('submit', async (e) => {
     }
 
     // 呼叫API-建立使用者
-    const response = await fetch('/commodity', {
+    const response = await fetch('/api/commodity', {
         method: 'POST',
         body: formData,
         headers: {
@@ -62,10 +62,10 @@ newCommodity.addEventListener('submit', async (e) => {
 
     // API回傳結果
     if (response.status === 401) {
-        document.location.href="/unauthorized";
+        document.location.href="/userUnauthorized";
     } else if (response.status === 201) {
         alert('新增商品成功');
-        document.location.href="/newCommodity";
+        document.location.href="/commodityNew";
     } else {
         const responseJson = await response.json();
         alert(responseJson.error);

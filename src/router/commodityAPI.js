@@ -19,7 +19,7 @@ const upload = multer({
 });
 
 // 新增商品
-router.post('/commodity', authToken, upload.single('photo'), async(req, res) => {
+router.post('/api/commodity', authToken, upload.single('photo'), async(req, res) => {
 
     // 如果有上傳圖片
     if (req.file) {
@@ -38,12 +38,28 @@ router.post('/commodity', authToken, upload.single('photo'), async(req, res) => 
     res.status(400).send({ error: error.message });
 });
 
-// 取得特定id的商品
-router.get('/commodity/:commodityId', authToken, async (req, res) => {
+// // 取得特定id的商品
+// router.get('/api/commodity/auth/:commodityId', authToken, async (req, res) => {
+//     const _id = req.params.commodityId;
+
+//     try {
+//         const commodity = await Commodity.findOne({ _id, owner: req.user._id });
+
+//         if (!commodity) {
+//             return res.status(404).send();
+//         }
+//         res.send(commodity);
+//     } catch (e) {
+//         res.status(500).send(e);
+//     }
+// });
+
+// 取得特定id的商品(不需經過authToken)
+router.get('/api/commodity/:commodityId', async (req, res) => {
     const _id = req.params.commodityId;
 
     try {
-        const commodity = await Commodity.findOne({ _id, owner: req.user._id });
+        const commodity = await Commodity.findById(_id);
 
         if (!commodity) {
             return res.status(404).send();
@@ -55,7 +71,7 @@ router.get('/commodity/:commodityId', authToken, async (req, res) => {
 });
 
 // 更新商品
-router.patch('/commodity/:commodityId', authToken, upload.single('photo'), async(req, res) => {
+router.patch('/api/commodity/:commodityId', authToken, upload.single('photo'), async(req, res) => {
     try {
         // 只能更新 'name', 'description', 'material', 'price', 'stock', 'photo'
         const updates = Object.keys(req.body);
@@ -92,7 +108,7 @@ router.patch('/commodity/:commodityId', authToken, upload.single('photo'), async
 });
 
 // 刪除商品
-router.delete('/commodity/:commodityId', authToken, async (req, res) => {
+router.delete('/api/commodity/:commodityId', authToken, async (req, res) => {
     try {
         // 由商品id＋owner id來刪除商品
         const commodity = await Commodity.findOneAndDelete({ _id: req.params.commodityId, owner: req.user._id });
@@ -110,7 +126,7 @@ router.delete('/commodity/:commodityId', authToken, async (req, res) => {
 // 取得賣場所有商品
 // GET /commodityAll?limit=10&skip=0
 // GET /commodityAll?sortBy=createdAt:desc
-router.get('/commodityAll', async (req, res) => {
+router.get('/api/commodityAll', async (req, res) => {
     const sort = {};
 
     if (req.query.sortBy) {
@@ -137,7 +153,7 @@ router.get('/commodityAll', async (req, res) => {
 // 取得user的所有商品
 // GET /commodityAll?limit=10&skip=0
 // GET /commodityAll?sortBy=createdAt:desc
-router.get('/commodityUser/', authToken, async (req, res) => {
+router.get('/api/commodityUser/', authToken, async (req, res) => {
     const sort = {};
 
     if (req.query.sortBy) {
@@ -161,7 +177,7 @@ router.get('/commodityUser/', authToken, async (req, res) => {
 });
 
 // 取得特定商品的圖片
-router.get('/commodity/:id/photo', async (req, res) => {
+router.get('/api/commodity/:id/photo', async (req, res) => {
     try {
         const commodity = await Commodity.findById(req.params.id);
 

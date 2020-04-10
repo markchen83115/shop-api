@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const moment = require('moment');
 const jwt = require('jsonwebtoken');
+const Commodity = require('../models/commodity');
 
 const userSchema = new mongoose.Schema({
     account: {
@@ -119,6 +119,13 @@ userSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
         this.password = await bcrypt.hash(this.password, 8);
     }
+    next();
+});
+
+//刪除使用者時 也刪除該使用者的商品
+userSchema.pre('remove', async function (next) {
+    const user = this;
+    await Commodity.deleteMany({ owner: user._id });
     next();
 });
 

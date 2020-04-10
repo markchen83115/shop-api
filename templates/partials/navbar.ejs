@@ -1,40 +1,42 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Shopping</a>
+    <a class="navbar-brand" href="/commodityAll">Shopping</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">首頁</a>
+        <li class="nav-item">
+          <a class="nav-link" href="/commodityAll">所有商品</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/userProfile">個人資料</a>
+          <a class="nav-link" href="/commodityUser">個人商品</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/userCommodity">個人商品</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/newCommodity">新增商品</a>
+          <a class="nav-link" href="/commodityNew">新增商品</a>
         </li>
       </ul>
     </div>
     <ul class="nav justify-content-end">
-      <li class="nav-item dropdown container">
+      <li class="nav-item">
+        <a class="nav-link" href="/userRegister">註冊</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/userLogin">登入</a>
+      </li>
+      <li class="nav-item dropdown col-sm">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           帳號
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/register">創建帳號</a>
-          <a class="dropdown-item" href="/login">登入</a>
+          <a class="dropdown-item" href="/userProfile">個人資料</a>
           <a class="dropdown-item" href="" id="logout">登出</a>
           <script>
             const logoutButton = document.querySelector('#logout');
             logoutButton.addEventListener('click', async (e) => {
               e.preventDefault();
   
-              const response = await fetch('/users/logout', {
+              const response = await fetch('/api/users/logout', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
@@ -45,9 +47,9 @@
               if (response.status === 200) {
                 localStorage.removeItem('jwtToken');
                 alert('成功登出');
-                document.location.href="/login"
+                document.location.href="/userLogin"
               } else if (response.status === 401) {
-                document.location.href="/unauthorized";
+                document.location.href="/userUnauthorized";
               } else {
                 alert(response.error); 
               }
@@ -59,7 +61,7 @@
             logoutAllButton.addEventListener('click', async (e) => {
               e.preventDefault();
   
-              const response = await fetch('/users/logoutAll', {
+              const response = await fetch('/api/users/logoutAll', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
@@ -70,9 +72,9 @@
               if (response.status === 200) {
                 localStorage.removeItem('jwtToken');
                 alert('成功登出所有裝置');
-                document.location.href="/login"
+                document.location.href="/userLogin"
               } else if (response.status === 401) {
-                document.location.href="/unauthorized";
+                document.location.href="/userUnauthorized";
               } else {
                 alert(response.error); 
               }
