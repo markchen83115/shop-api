@@ -116,6 +116,7 @@ deleteUser.addEventListener('click', async (e) => {
     if (response.status === 401) {
         document.location.href="/userUnauthorized";
     } else if (response.status === 200) {
+        localStorage.removeItem('jwtToken');
         alert('刪除使用者成功');
         document.location.href="/commodityAll";
     } else {

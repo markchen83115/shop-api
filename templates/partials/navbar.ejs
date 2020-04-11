@@ -24,10 +24,12 @@
       <li class="nav-item">
         <a class="nav-link" href="/userLogin">登入</a>
       </li>
-      <li class="nav-item dropdown col-sm">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          帳號
-        </a>
+      <li class="nav-item dropdown col-sm" id="userList">
+
+        <script id="userAccount-template" type="text/html">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{account}}</a>
+        </script>
+        
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="/userProfile">個人資料</a>
           <a class="dropdown-item" href="" id="logout">登出</a>
@@ -83,3 +85,11 @@
         </div>
     </ul>
 </nav>
+
+
+
+<!-- mustache.js -->
+<script src="https://unpkg.com/mustache@latest"></script>
+
+<!-- navbar.js -->
+<script src="/js/navbar.js"></script>

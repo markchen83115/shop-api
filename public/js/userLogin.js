@@ -28,6 +28,7 @@ loginForm.addEventListener('submit', async (e) => {
         localStorage.setItem('jwtToken', responseJson.token);
         console.log(localStorage.getItem('jwtToken'));
         alert('登入成功');
+        document.location.href="/userProfile"
     } else {
         alert('登入失敗, 請重新嘗試')
     }
