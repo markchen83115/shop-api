@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const userAPIRouter = require('./router/userAPI');
 const commodityAPIRouter = require('./router/commodityAPI');
+const cartAPIRouter = require('./router/cartAPI');
 const shopWebRouter = require('./router/shopWeb');
 
 // 連接mongodb
@@ -22,6 +23,7 @@ app.use(express.static(publicDirectoryPath));
 // URL
 app.use(userAPIRouter);
 app.use(commodityAPIRouter);
+app.use(cartAPIRouter);
 app.use(shopWebRouter);
 
 module.exports = app;

@@ -12,6 +12,7 @@
     <div class="card mb-3 container">
         <img src="/api/commodity/<%= _id %>/photo" class="img-thumbnail rounded mx-auto d-block" alt="無圖片" width="350" height="350">
         <div class="card-body">
+          <input type="text" value="<%= _id %>" id="commodityId" hidden>
           <h5 class="card-title text-center">商品名稱: <%= name %></h5>
           <p class="card-text text-center">描述: <%= description %></p>
           <p class="card-text text-center">材質: <%= material %></p>

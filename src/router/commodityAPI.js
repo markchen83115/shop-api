@@ -38,22 +38,6 @@ router.post('/api/commodity', authToken, upload.single('photo'), async(req, res)
     res.status(400).send({ error: error.message });
 });
 
-// // 取得特定id的商品
-// router.get('/api/commodity/auth/:commodityId', authToken, async (req, res) => {
-//     const _id = req.params.commodityId;
-
-//     try {
-//         const commodity = await Commodity.findOne({ _id, owner: req.user._id });
-
-//         if (!commodity) {
-//             return res.status(404).send();
-//         }
-//         res.send(commodity);
-//     } catch (e) {
-//         res.status(500).send(e);
-//     }
-// });
-
 // 取得特定id的商品(不需經過authToken)
 router.get('/api/commodity/:commodityId', async (req, res) => {
     const _id = req.params.commodityId;

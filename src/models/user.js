@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Commodity = require('../models/commodity');
+const Cart = require('../models/cart');
 
 const userSchema = new mongoose.Schema({
     account: {
@@ -70,6 +71,13 @@ userSchema.virtual('commodity', {
     foreignField: 'owner'
 });
 
+// 虛擬欄位 order --> 抓取user產生的order --> 透過populate()
+userSchema.virtual('order', {
+    ref: 'Order',
+    localField: '_id',
+    foreignField: 'userId'
+});
+
 // 管理res.send出現的屬性
 userSchema.methods.toJSON = function () {
     const userObject = this.toObject();
@@ -122,10 +130,11 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-//刪除使用者時 也刪除該使用者的商品
+//刪除使用者時 也刪除該使用者的商品.購物車
 userSchema.pre('remove', async function (next) {
     const user = this;
     await Commodity.deleteMany({ owner: user._id });
+    await Cart.deleteOne({ userId: user._id });
     next();
 });
 
