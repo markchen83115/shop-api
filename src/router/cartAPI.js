@@ -10,16 +10,18 @@ router.post('/api/cart', authToken, async(req, res) => {
         const cart = await Cart.findOne({ userId: req.user._id });
         
         if (!cart) { // 若無購物車 則新增購物車
-            const cartItem = new Cart({ 
-                ...req.body, // 擴充套件運算子(spread operator)
+            const newCart = new Cart({
+                cartItem: [{
+                    ...req.body
+                }],
                 userId: req.user._id //連接user
             });
-            await cartItem.save();
-            res.status(201).send(cartItem);
+            await newCart.save();
+            res.status(201).send(newCart);
 
         } else { // 若已有購物車 則檢視購物車商品
             const index = cart.cartItem.findIndex((item) => item.commodityId.toString() === req.body.commodityId)
-            
+                
             if (index === -1) { // 無相同商品 則新增商品到購物車
                 cart.cartItem.push({
                     commodityId: req.body.commodityId,
@@ -31,10 +33,8 @@ router.post('/api/cart', authToken, async(req, res) => {
                 cart.cartItem[index].quantity += Number(req.body.quantity);
                 await cart.save();
             }
-
             res.status(201).send(cart);
         }
-        
     } catch (e) {
         res.status(400).send(e);
     }
@@ -108,7 +108,7 @@ router.delete('/api/cart/:commodityId', authToken, async(req, res) => {
         }
         // 移除單一商品
         cart.cartItem = cart.cartItem.filter((item) => item.commodityId.toString() !== cId);
-        cart.save();
+        await cart.save();
         res.send(cart);
     } catch (e) {
         res.status(400).send(e);
