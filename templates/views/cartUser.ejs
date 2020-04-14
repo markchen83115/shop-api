@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <title>購物車</title>
+    <!-- bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <!-- navbar -->
+    <%- include ("../partials/navbar.ejs") %>
+
+    <div class="container">
+        <form id="cart">
+            <h3>購物車</h3>
+            <ul class="list-unstyled" id="cartList">
+                <script id="cart-template" type="text/html">
+                    <!-- 隱藏id -->
+                    <input type="text" class="form-control" id="{{commodityId}}" value="" hidden>
+                    <li class="media">
+                    <img src="/api/commodity/{{commodityId}}/photo" class="align-self-center mr-3" alt="" width="50" height="50">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1"><a href="/commodity/{{commodityId}}">{{commodityName}}</a></h5>
+                        <label for="{{commodityId}}_qty">數量:</label>
+                        <input type="number" value="{{commodityQuantity}}" class="purchaseNum" id="{{commodityId}}_qty" max="{{commodityStock}}" aria-describedby="stockHelpInline" required>
+                        <small id="stockHelpInline" class="text-muted">還剩{{commodityStock}}件</small>
+                        <button type="submit" class="btn btn-danger deleteSingleItem" id="{{commodityId}}_deleteSingleItem">刪除</button>
+                    </div>
+                    </li>
+                </script>
+              </ul>
+            <button type="submit" class="btn btn-primary" id="purchase">購買</button>
+        </form>
+        <button class="btn btn-danger" id="deleteCart">刪除購物車</button>
+    </div>
+
+    <!-- bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- mustache.js -->
+    <script src="https://unpkg.com/mustache@latest"></script>
+
+    <!-- cartUser.js -->
+    <script src="/js/cartUser.js"></script>
+
+</body>
+</html>

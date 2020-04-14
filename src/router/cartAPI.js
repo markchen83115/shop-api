@@ -40,7 +40,7 @@ router.post('/api/cart', authToken, async(req, res) => {
     }
 });
 
-// 更改購物車商品數量 (購物車頁面)
+// 更改購物車的單一商品數量 (購物車頁面)
 router.patch('/api/cart/:commodityId', authToken, async(req, res) => {
     try {
         const cId = req.params.commodityId;
@@ -92,6 +92,23 @@ router.get('/api/cart/me', authToken, async(req, res) => {
 router.delete('/api/cart', authToken, async(req, res) => {
     try {
         const cart = await Cart.deleteOne({ userId: req.user._id });
+        res.send(cart);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// 刪除購物車內單一商品
+router.delete('/api/cart/:commodityId', authToken, async(req, res) => {
+    try {
+        const cId = req.params.commodityId;
+        const cart = await Cart.findOne({ userId: req.user._id });
+        if (!cart) {
+            return res.status(404).send();
+        }
+        // 移除單一商品
+        cart.cartItem = cart.cartItem.filter((item) => item.commodityId.toString() !== cId);
+        cart.save();
         res.send(cart);
     } catch (e) {
         res.status(400).send(e);

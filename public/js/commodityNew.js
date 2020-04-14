@@ -1,3 +1,8 @@
+// 未登入 不得新增商品
+if (!localStorage.getItem('jwtToken')) {
+    document.location.href="/userUnauthorized";
+}
+
 // 抓取Form裡面傳送的資料來使用
 const newCommodity = document.querySelector('#newCommodity');
 const name = document.querySelector('#name');

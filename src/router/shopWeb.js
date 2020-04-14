@@ -51,6 +51,10 @@ router.get('/commodityMod/:commodityId', async (req, res) => {
     res.render('commodityMod', commodity);
 });
 
+router.get('/cart', async(req, res) => {
+    res.render('cartUser');
+});
+
 
 
 module.exports = router;
