@@ -1,5 +1,5 @@
 {
-  "name": "shopping-website",
+  "name": "shop-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -34,6 +34,6 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
     "sharp": "^0.25.2",
-    "validator": "^12.2.0"
+    "validator": "^13.0.0"
   }
 }
