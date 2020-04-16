@@ -12,6 +12,13 @@ require('./db/mongoose'); // /Users/markchen83115/mongodb/bin/mongod --dbpath=/U
 const app = express();
 app.use(express.json());//auto parse Json from client side
 
+// URL
+app.use(userApiRouter);
+app.use(commodityApiRouter);
+app.use(cartApiRouter);
+app.use(orderApiRouter);
+app.use(shopWebRouter);
+
 // 定義路徑
 const publicDirectoryPath = path.join(__dirname, '../public');
 const viewsPath = path.join(__dirname, '../templates/views');
@@ -21,11 +28,6 @@ app.set('view engine', 'ejs');
 app.set('views', viewsPath);
 app.use(express.static(publicDirectoryPath));
 
-// URL
-app.use(userApiRouter);
-app.use(commodityApiRouter);
-app.use(cartApiRouter);
-app.use(orderApiRouter);
-app.use(shopWebRouter);
+
 
 module.exports = app;
