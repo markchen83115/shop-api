@@ -3,6 +3,10 @@ const rp = require('request-promise');
 
 const router = new express.Router();
 
+router.get('', (req, res) => {
+    res.render('commodityAll');
+});
+
 router.get('/userRegister', (req, res) => {
     res.render('userRegister');
 });
@@ -62,6 +66,7 @@ router.get('/cart', async(req, res) => {
 router.get('/order', async(req, res) => {
     res.render('orderList');
 });
+
 
 
 module.exports = router;
