@@ -2,11 +2,11 @@ const express = require('express');
 const path = require('path');
 // 連接mongodb
 require('./db/mongoose'); // /Users/markchen83115/mongodb/bin/mongod --dbpath=/Users/markchen83115/mongodb-data
-const commodityApiRouter = require('./router/commodityApi');
-const userApiRouter = require('./router/userApi');
-const cartApiRouter = require('./router/cartApi');
-const orderApiRouter = require('./router/orderApi');
-const shopWebRouter = require('./router/shopWeb');
+const commodityApiRouter = require('./routers/commodityApi');
+const userApiRouter = require('./routers/userApi');
+const cartApiRouter = require('./routers/cartApi');
+const orderApiRouter = require('./routers/orderApi');
+const shopWebRouter = require('./routers/shopWeb');
 
 
 const app = express();
