@@ -13,10 +13,10 @@ const app = express();
 app.use(express.json());//auto parse Json from client side
 
 // URL
-app.use(userApiRouter);
 app.use(commodityApiRouter);
 app.use(cartApiRouter);
 app.use(orderApiRouter);
+app.use(userApiRouter);
 app.use(shopWebRouter);
 
 // 定義路徑
