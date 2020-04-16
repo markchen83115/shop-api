@@ -11,6 +11,9 @@
   "jest": {
     "testEnvironment": "node"
   },
+  "engines": {
+    "node": "13.9.0"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -34,8 +37,5 @@
     "request-promise": "^4.2.5",
     "sharp": "^0.25.1",
     "validator": "^12.2.0"
-  },
-  "engines": {
-    "node": "13.9.0"
   }
 }
