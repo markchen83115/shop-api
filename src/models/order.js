@@ -8,19 +8,15 @@ const orderSchema = new mongoose.Schema({
         ref: 'User'
     },
     orderItem: [{
+        commodityId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'Commodity'
+        },
         name: {
             type: String,
             required: true,
             maxlength: 60 
-        },
-        description: {
-            type: String,
-            maxlength: 3000,
-            default: '無'
-        },
-        material: {
-            type: String,
-            default: '無'
         },
         price: {
             type: Number,
@@ -41,11 +37,13 @@ const orderSchema = new mongoose.Schema({
                     throw new Error('Stock must be integer');
                 }
             }
-        },
-        photo: {
-            type: Buffer
         }
-    }]
+    }],
+    completed: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
 }, {
     timestamps: true
 });

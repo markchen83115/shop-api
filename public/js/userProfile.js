@@ -1,6 +1,4 @@
 // 對應form的欄位
-const updateUser = document.querySelector('#updateUser');
-const deleteUser = document.querySelector('#deleteUser');
 const account = document.querySelector('#account');
 const email = document.querySelector('#email');
 const phone = document.querySelector('#phone');
@@ -12,6 +10,12 @@ const gender = document.getElementsByName('gender');
 const imgAvatar = document.querySelector('#imgAvatar');
 const avatar = document.querySelector('#avatar');
 
+// form
+const updateUser = document.querySelector('#userProfile');
+
+// button
+const deleteUser = document.querySelector('#deleteUser');
+const updatePassword = document.querySelector('#updatePassword');
 
 // 獲取radio buttom 性別資料 - getRVBN()
 const getRVBN = (rName) => {
@@ -63,7 +67,7 @@ const getUserProfile = async () => {
 };
 
 // 更新使用者資料
-updateUser.addEventListener('click', async (e) => {
+updateUser.addEventListener('submit', async (e) => {
     // 讓瀏覽器不重新刷新
     e.preventDefault();
 
@@ -92,10 +96,17 @@ updateUser.addEventListener('click', async (e) => {
         document.location.href="/userUnauthorized";
     } else if (response.status === 200) {
         alert('更新資料成功');
-        document.location.href="/userProfile";
+        // document.location.href="/userProfile";
     } else {
-        const responseJson = await response.json();
-        alert(responseJson.error);
+        const error = await response.json();
+        if (error.name === 'MongoError') {
+            alert(error.errmsg);
+        } else if (error.name === 'ValidationError') {
+            alert(error.message)
+        } else {
+            alert(error.error);
+        }
+        
     }
 });
 
@@ -123,6 +134,11 @@ deleteUser.addEventListener('click', async (e) => {
         const responseJson = await response.json();
         alert(responseJson.error);
     }
+});
+
+// 更改密碼
+updatePassword.addEventListener('click', () => {
+    document.location.href="/userUpdatePassword";
 });
 
 getUserProfile();

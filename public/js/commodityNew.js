@@ -4,7 +4,7 @@ if (!localStorage.getItem('jwtToken')) {
 }
 
 // 抓取Form裡面傳送的資料來使用
-const newCommodity = document.querySelector('#newCommodity');
+const newCommodityForm = document.querySelector('#newCommodity');
 const name = document.querySelector('#name');
 const description = document.querySelector('#description');
 const material = document.querySelector('#material');
@@ -30,7 +30,7 @@ function readURL(input) {
 
 
 // 提交表單
-newCommodity.addEventListener('submit', async (e) => {
+newCommodityForm.addEventListener('submit', async (e) => {
     // 讓瀏覽器不重新刷新
     e.preventDefault();
 

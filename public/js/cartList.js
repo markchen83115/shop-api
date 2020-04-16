@@ -30,10 +30,10 @@
             
             if (response_cItem.status === 200) {
                 const cItem = await response_cItem.json();
-                console.log(cItem);
                 const html = Mustache.render(cartTemplate, {
                     commodityId: cart.cartItem[i].commodityId,
                     commodityName: cItem.name,
+                    commodityPrice: cItem.price,
                     commodityQuantity: cart.cartItem[i].quantity,
                     commodityStock: cItem.stock
                 });
@@ -77,6 +77,13 @@
                     'Content-Type': 'application/json'
                 }
             });
+            if (responseChangeQty.status === 401) {
+                return document.location.href="/userUnauthorized";
+            }
+
+            if (responseChangeQty.status !== 200) {
+                return alert('更改購物車時 發生錯誤')
+            }
             elem.disabled = false;
         });  
     });
@@ -103,7 +110,7 @@
 
             deleteButton.disabled = false;
 
-            // API回傳
+            // API回傳結果
             if (responseDeleteSingleItem.status === 401) {
                 document.location.href="/userUnauthorized";
             } else if (responseDeleteSingleItem.status === 200) {
@@ -118,9 +125,10 @@
 
 })();
 
+// form
+const cartForm = document.querySelector('#cartForm');
 
 // Button
-const purchaseButton = document.querySelector('#purchase');
 const deleteCartButton = document.querySelector('#deleteCart');
 
 // 刪除購物車
@@ -172,4 +180,70 @@ deleteCartButton.addEventListener('click', async (e) => {
     }
 });
 
+// 送出訂單order
+cartForm.addEventListener('submit', async (e) => {
+    // 讓瀏覽器不重新刷新
+    e.preventDefault();
 
+    // 取得購物車
+    const responseCart = await fetch('/api/cart/me', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+        }
+    });
+
+    const cartList = await responseCart.json();
+    // cart api 回傳
+    if (responseCart.status === 401) { // 若未登入
+        document.location.href="/userUnauthorized";
+    } else if (responseCart.status !== 200) { //error
+        if (cartList.name === 'MongoError') {
+            alert(cartList.errmsg);
+        } else if (cartList.name === 'ValidationError') {
+            alert(cartList.message)
+        } else {
+            alert(cartList.error);
+        }
+    } else { // 成功 status(200)
+        console.log(cartList);
+
+        // 取得要傳送的購物車內容: commodityId, quantity
+        const items = [];
+        cartList.cartItem.forEach((item) => {
+            items.push({
+                commodityId: item.commodityId,
+                quantity: item.quantity
+            })
+        });
+        
+        // 送購物車內容到order api
+        const responseOrder = await fetch('/api/order', {
+            method: 'POST',
+            body: JSON.stringify({ items }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+            }
+        });
+
+        // api回傳結果
+        const order = await responseOrder.json();
+        if (responseOrder.status === 401) { // 未登入
+            return document.location.href="/userUnauthorized";
+        } else if (responseOrder.status !== 201) { // error
+            console.log(order)
+            if (cartList.name === 'MongoError') {
+                alert(cartList.errmsg);
+            } else if (cartList.name === 'ValidationError') {
+                alert(cartList.message)
+            } else {
+                alert(cartList.error);
+            }
+        } else { //成功 status(201)
+            console.log(order)
+            alert('成功訂購');
+            return document.location.href="/order";
+        }
+    }
+});

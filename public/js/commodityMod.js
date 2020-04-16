@@ -1,5 +1,5 @@
 // 對應form的欄位
-const storageButton = document.querySelector('#storage');
+const commodityForm = document.querySelector('#commodityForm');
 const deleteButton = document.querySelector('#delete');
 const id = document.querySelector('#id');
 const name = document.querySelector('#name');
@@ -11,7 +11,7 @@ const imgPhoto = document.querySelector('#imgPhoto');
 const photo = document.querySelector('#photo');
 
 // 更新商品資料
-storageButton.addEventListener('click', async (e) => {
+commodityForm.addEventListener('submit', async (e) => {
     // 讓瀏覽器不重新刷新
     e.preventDefault();
 

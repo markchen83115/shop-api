@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>購買清單</title>
+    <!-- bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+<body>
+    <!-- navbar -->
+    <%- include ("../partials/navbar.ejs") %>
+
+    <div id="orderList">
+
+    </div>
+
+    <!-- 日期模板 -->
+    <script id="date-template" type="text/html">
+      <div class="card text-center" >
+        <div class="card-header">
+          <h6>購買日期: {{orderDate}}</h6>
+        </div>
+      </div>
+    </script>
+
+    <!-- 明細模板 -->
+    <script id="item-template" type="text/html">
+      <div class="card text-center" >
+        <div class="card-body">
+          <p class="card-text">商品名稱: {{name}}</p>
+          <p class="card-text">商品價格: {{price}}</p>
+          <p class="card-text">購買數量: {{quantity}}</p>
+        </div>
+      </div>
+    </script>
+
+    <!-- 總金額 -->
+    <script id="amount-template" type="text/html">
+      <div class="card text-center" >
+        <div class="card-body">
+          <h6 class="card-title">訂單金額: ${{orderAmount}}</h6>
+        </div>
+      </div>
+      <p></p>
+    </script>
+    
+    
+
+    <!-- packages -->
+    <%- include ("../partials/packages.ejs") %>
+
+    <!-- orderList.js -->
+    <script src="/js/orderList.js"></script>
+</body>
+</html>

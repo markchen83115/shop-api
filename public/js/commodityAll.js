@@ -1,5 +1,4 @@
-const getUserCommodity = async () => {
-
+(async () => {
     const response = await fetch('/api/commodityAll', {
         method: 'GET'
     });
@@ -22,11 +21,7 @@ const getUserCommodity = async () => {
             const html = Mustache.render(commodityTemplate, commodity[i]);
             $commodityElements.insertAdjacentHTML("beforeend", html); //before:訊息會往下疊 after:訊息往上疊
         }
-
-
     } else {
         alert(commodity.error);
     }
-};
-
-getUserCommodity();
+})();

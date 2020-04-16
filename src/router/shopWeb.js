@@ -19,6 +19,10 @@ router.get('/userUnauthorized', (req, res) => {
     res.render('userUnauthorized');
 });
 
+router.get('/userUpdatePassword', (req, res) => {
+    res.render('userUpdatePassword');
+});
+
 router.get('/commodityNew', (req, res) => {
     res.render('commodityNew');
 });
@@ -52,9 +56,12 @@ router.get('/commodityMod/:commodityId', async (req, res) => {
 });
 
 router.get('/cart', async(req, res) => {
-    res.render('cartUser');
+    res.render('cartList');
 });
 
+router.get('/order', async(req, res) => {
+    res.render('orderList');
+});
 
 
 module.exports = router;

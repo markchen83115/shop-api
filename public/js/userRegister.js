@@ -48,9 +48,9 @@ registerForm.addEventListener('submit', async (e) => {
     if (response.status === 201) {
         localStorage.removeItem('jwtToken');
         localStorage.setItem('jwtToken', responseJson.token);
-        console.log('Token: ', localStorage.getItem('jwtToken'));
-        console.log(responseJson);
         alert('成功創建帳號');
+        document.location.href="/userProfile";
+
     // 若回傳400
     } else if (response.status === 400) {
         // console.log(responseUser)
