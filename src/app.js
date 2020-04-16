@@ -19,7 +19,6 @@ app.use(orderApiRouter);
 app.use(userApiRouter);
 app.use(shopWebRouter);
 
-console.log(__dirname)
 
 // 定義路徑
 const publicDirectoryPath = path.join(__dirname, '../public');
