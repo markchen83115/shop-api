@@ -1,13 +1,13 @@
 const express = require('express');
 const path = require('path');
+// 連接mongodb
+require('./db/mongoose'); // /Users/markchen83115/mongodb/bin/mongod --dbpath=/Users/markchen83115/mongodb-data
 const commodityApiRouter = require('./router/commodityApi');
 const userApiRouter = require('./router/userApi');
 const cartApiRouter = require('./router/cartApi');
 const orderApiRouter = require('./router/orderApi');
 const shopWebRouter = require('./router/shopWeb');
 
-// 連接mongodb
-require('./db/mongoose'); // /Users/markchen83115/mongodb/bin/mongod --dbpath=/Users/markchen83115/mongodb-data
 
 const app = express();
 app.use(express.json());//auto parse Json from client side
@@ -27,7 +27,5 @@ const viewsPath = path.join(__dirname, '../templates/views');
 app.set('view engine', 'ejs');
 app.set('views', viewsPath);
 app.use(express.static(publicDirectoryPath));
-
-
 
 module.exports = app;
