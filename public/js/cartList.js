@@ -95,6 +95,8 @@
 
             // 先disable button
             deleteButton.disabled = true;
+            purchaseButton.disabled = true;
+            deleteCartButton.disabled = true;
 
             // 取得commodityId
             const cId = deleteButton.id.split('_')[0];
@@ -109,6 +111,8 @@
             });
 
             deleteButton.disabled = false;
+            purchaseButton.disabled = false;
+            deleteCartButton.disabled = false;
 
             // API回傳結果
             if (responseDeleteSingleItem.status === 401) {
@@ -129,6 +133,7 @@
 const cartForm = document.querySelector('#cartForm');
 
 // Button
+const purchaseButton = document.querySelector('#purchase');
 const deleteCartButton = document.querySelector('#deleteCart');
 
 // 刪除購物車
@@ -139,29 +144,6 @@ deleteCartButton.addEventListener('click', async (e) => {
     // 呼叫API-刪除購物車
     const response = await fetch(`/api/cart`, {
         method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
-            'Content-Type': 'application/json'
-        }
-    });
-
-    // API結果回傳
-    if (response.status === 401) {
-        document.location.href="/userUnauthorized";
-    } else if (response.status === 200) {
-        alert('刪除購物車成功');
-        document.location.href=`/cart`;
-    } else {
-        const responseJson = await response.json();
-        alert(responseJson.error);
-    }
-});
-
-// 刪除購物車的單一商品
-deleteCartButton.addEventListener('click', async (e) => {
-    // 呼叫API-刪除購物車單一商品
-    const response = await fetch(`/api/cart/:commodityId`, {
-        method: 'POST',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
             'Content-Type': 'application/json'

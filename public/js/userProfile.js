@@ -96,7 +96,7 @@ updateUser.addEventListener('submit', async (e) => {
         document.location.href="/userUnauthorized";
     } else if (response.status === 200) {
         alert('更新資料成功');
-        // document.location.href="/userProfile";
+        document.location.href="/userProfile";
     } else {
         const error = await response.json();
         if (error.name === 'MongoError') {
