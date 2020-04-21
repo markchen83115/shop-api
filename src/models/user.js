@@ -27,7 +27,6 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: String,
         trim: true,
-        unique: true,
         validate(v) {
             if (!validator.isMobilePhone(v,'zh-TW')) {
                 throw new Error('Mobile Phone is invalid');
@@ -92,7 +91,7 @@ userSchema.methods.toJSON = function () {
 
 // generateAuthToken() 產生新的token
 userSchema.methods.generateAuthToken = async function() {
-    const token = jwt.sign({ _id: this.id.toString() }, process.env.JWT_SECRET, { expiresIn: '7 days' });
+    const token = jwt.sign({ _id: this.id.toString() }, process.env.JWT_SECRET, { expiresIn: '1h' });
     this.tokens.push({ token });
     await this.save();
     return token;

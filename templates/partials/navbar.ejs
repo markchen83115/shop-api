@@ -38,10 +38,11 @@
           <a class="dropdown-item" href="/order">購物清單</a>
           <a class="dropdown-item" href="" id="logout">登出</a>
           <script>
+            // 刪除token
             const logoutButton = document.querySelector('#logout');
             logoutButton.addEventListener('click', async (e) => {
               e.preventDefault();
-  
+
               const response = await fetch('/api/users/logout', {
                 method: 'POST',
                 headers: {
@@ -60,6 +61,18 @@
                 alert(response.error); 
               }
             });
+          </script>
+          <!-- Google登出 -->
+          <a class="dropdown-item" href="" onclick="signOut();">Google登出</a>
+          <script src="https://apis.google.com/js/platform.js" async defer></script>
+          <meta name="google-signin-client_id" content="6122339461-j9snr7p986f8i9ucgtufv6u21gutdspt.apps.googleusercontent.com">
+          <script>
+            function signOut() {
+              var auth2 = gapi.auth2.getAuthInstance();
+              auth2.signOut().then(function () {
+                console.log('User signed out.');
+              });
+            }
           </script>
           <a class="dropdown-item" href="" id="logoutAll">登出所有裝置</a>
           <script>

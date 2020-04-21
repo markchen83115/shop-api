@@ -15,6 +15,10 @@ router.get('/userLogin', (req, res) => {
     res.render('userLogin');
 });
 
+router.get('/userGoogleOAuth', (req, res) => {
+    res.render('userGoogleOAuth');
+});
+
 router.get('/userProfile', (req, res) => {
     res.render('userProfile');
 });

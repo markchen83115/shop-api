@@ -49,6 +49,8 @@
 
             // 先disable input
             elem.disabled = true;
+            purchaseButton.disabled = true;
+            deleteCartButton.disabled = true;
 
             // 取得commodityId
             const cId = elem.id.split('_')[0];
@@ -77,6 +79,11 @@
                     'Content-Type': 'application/json'
                 }
             });
+
+            elem.disabled = false;
+            purchaseButton.disabled = false;
+            deleteCartButton.disabled = false;
+
             if (responseChangeQty.status === 401) {
                 return document.location.href="/userUnauthorized";
             }
@@ -84,7 +91,6 @@
             if (responseChangeQty.status !== 200) {
                 return alert('更改購物車時 發生錯誤')
             }
-            elem.disabled = false;
         });  
     });
 
@@ -94,7 +100,7 @@
         deleteButton.addEventListener("click", async () => {
 
             // 先disable button
-            deleteButton.disabled = true;
+            deleteSingleItem.disabled = true;
             purchaseButton.disabled = true;
             deleteCartButton.disabled = true;
 
@@ -110,7 +116,7 @@
                 }
             });
 
-            deleteButton.disabled = false;
+            deleteSingleItem.disabled = false;
             purchaseButton.disabled = false;
             deleteCartButton.disabled = false;
 
@@ -141,6 +147,11 @@ deleteCartButton.addEventListener('click', async (e) => {
     // 讓瀏覽器不重新刷新
     e.preventDefault();
 
+    // 先disable button
+    deleteSingleItem.disabled = true;
+    purchaseButton.disabled = true;
+    deleteCartButton.disabled = true;
+
     // 呼叫API-刪除購物車
     const response = await fetch(`/api/cart`, {
         method: 'DELETE',
@@ -149,6 +160,10 @@ deleteCartButton.addEventListener('click', async (e) => {
             'Content-Type': 'application/json'
         }
     });
+
+    deleteSingleItem.disabled = false;
+    purchaseButton.disabled = false;
+    deleteCartButton.disabled = false;
 
     // API結果回傳
     if (response.status === 401) {

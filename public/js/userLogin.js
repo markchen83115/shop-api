@@ -32,6 +32,4 @@ loginForm.addEventListener('submit', async (e) => {
     } else {
         alert('登入失敗, 請重新嘗試')
     }
-
-    
 });

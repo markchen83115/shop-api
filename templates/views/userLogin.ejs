@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>使用者登入</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="6122339461-j9snr7p986f8i9ucgtufv6u21gutdspt.apps.googleusercontent.com">
     <!-- bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
@@ -23,12 +25,25 @@
             <button type="submit" class="btn btn-primary">登入</button>
           </form>
     </div>
+    <p></p>
+    <p></p>
+
+    <!-- Google OAuth -->
+    <div class="container">
+      <h3>Google登入</h3>
+
+      <div class="g-signin2" onclick="document.location.href='/userGoogleOAuth';"></div>
+    </div>
+
+    <!-- google登入 回傳user + token資料 -->
+    <!-- <a href="/api/auth/google">Google登入</a> -->
     
   <!-- packages -->
   <%- include ("../partials/packages.ejs") %>
 
   <!-- userLogin.js -->
   <script src="/js/userLogin.js"></script>
+
 
 </body>
 </html>
