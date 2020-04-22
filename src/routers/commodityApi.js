@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const {client, cacheAllCommodity} = require('../middleware/redis');
 const Commodity = require('../models/commodity');
 const authToken = require('../middleware/authToken');
 
@@ -110,7 +111,7 @@ router.delete('/api/commodity/:commodityId', authToken, async (req, res) => {
 // 取得賣場所有商品
 // GET /commodityAll?limit=10&skip=0
 // GET /commodityAll?sortBy=createdAt:desc
-router.get('/api/commodityAll', async (req, res) => {
+router.get('/api/commodityAll', cacheAllCommodity, async (req, res) => {
     const sort = {};
 
     if (req.query.sortBy) {
@@ -120,6 +121,12 @@ router.get('/api/commodityAll', async (req, res) => {
     }
 
     try {
+
+        if (req.commodity) {
+            return res.send(req.commodity);
+        }
+
+
         const commodity = await Commodity.find(
             {}, // 搜索全部的商品
             null, // optional fields to return
@@ -128,6 +135,25 @@ router.get('/api/commodityAll', async (req, res) => {
                 skip: parseInt(req.query.skip), //要跳過幾項資料 EX: skip=2 從第3項資料開始顯示
                 sort 
             }).exec();
+
+        // 傳送data到redis
+        // 商品總數
+        client.setex("numCommodity", 30, `${commodity.length}`);
+        // 每個商品資料
+        for (let i = 0, length = commodity.length; i < length; i ++) { 
+            client.hmset(`commodity:${i}`,
+                "description", `${commodity[i].description}`,
+                "material", `${commodity[i].material}`,
+                "_id", `${commodity[i]._id}`,
+                "name", `${commodity[i].name}`,
+                "price", `${commodity[i].price}`,
+                "stock", `${commodity[i].stock}`,
+                "owner", `${commodity[i].owner}`,
+                "createdAt", `${commodity[i].createdAt}`,
+                "updatedAt", `${commodity[i].updatedAt}`,
+            );
+            client.expire(`commodity:${i}`, 30);
+        }
         res.send(commodity);
     } catch (e) {
         res.status(500).send(e);
