@@ -8,6 +8,11 @@ const asyncRedisClient = asyncRedis.decorate(client);
 // cache middleware - all commodity
 const cacheAllCommodity = async (req, res, next) => {
     try {
+        // 如果有query
+        if (req.query) {
+            return next();
+        }
+
         const value = await asyncRedisClient.get('numCommodity');
         // 沒有資料則回傳next()
         if (!value) {

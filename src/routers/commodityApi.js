@@ -121,10 +121,6 @@ router.get('/api/commodityAll', cacheAllCommodity, async (req, res) => {
     }
 
     try {
-        if (req.commodity) {
-            return res.send(req.commodity);
-        }
-
         const commodity = await Commodity.find(
             {}, // 搜索全部的商品
             null, // optional fields to return
@@ -134,23 +130,25 @@ router.get('/api/commodityAll', cacheAllCommodity, async (req, res) => {
                 sort 
             }).exec();
 
-        // 傳送data到Redis
-        // 商品總數
-        client.setex("numCommodity", 5 * 60, `${commodity.length}`);
-        // 每個商品資料
-        for (let i = 0, length = commodity.length; i < length; i ++) { 
-            client.hmset(`commodity:${i}`,
-                "description", `${commodity[i].description}`,
-                "material", `${commodity[i].material}`,
-                "_id", `${commodity[i]._id}`,
-                "name", `${commodity[i].name}`,
-                "price", `${commodity[i].price}`,
-                "stock", `${commodity[i].stock}`,
-                "owner", `${commodity[i].owner}`,
-                "createdAt", `${commodity[i].createdAt}`,
-                "updatedAt", `${commodity[i].updatedAt}`
-            );
-            client.expire(`commodity:${i}`, 5 * 60);
+        // 如果沒有query要求 將資料存入Redis
+        if (!req.query) {
+            // 商品總數
+            client.setex("numCommodity", 5 * 60, `${commodity.length}`);
+            // 每個商品資料
+            for (let i = 0, length = commodity.length; i < length; i ++) { 
+                client.hmset(`commodity:${i}`,
+                    "description", `${commodity[i].description}`,
+                    "material", `${commodity[i].material}`,
+                    "_id", `${commodity[i]._id}`,
+                    "name", `${commodity[i].name}`,
+                    "price", `${commodity[i].price}`,
+                    "stock", `${commodity[i].stock}`,
+                    "owner", `${commodity[i].owner}`,
+                    "createdAt", `${commodity[i].createdAt}`,
+                    "updatedAt", `${commodity[i].updatedAt}`
+                );
+                client.expire(`commodity:${i}`, 5 * 60);
+            }
         }
         res.send(commodity);
     } catch (e) {
