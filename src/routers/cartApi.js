@@ -91,10 +91,15 @@ router.get('/api/cart/me', authToken, async(req, res) => {
 // 刪除購物車
 router.delete('/api/cart', authToken, async(req, res) => {
     try {
-        const cart = await Cart.deleteOne({ userId: req.user._id });
+        const cart = await Cart.findOneAndDelete({ userId: req.user._id });
+
+        if (!cart) {
+            return res.status(404).send();
+        }
+        
         res.send(cart);
     } catch (e) {
-        res.status(400).send(e);
+        res.status(500).send(e);
     }
 });
 

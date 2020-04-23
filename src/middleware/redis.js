@@ -27,7 +27,7 @@ const cacheAllCommodity = async (req, res, next) => {
                 stock: Number(data.stock),
                 owner: mongoose.Types.ObjectId(data.owner),
                 createdAt: data.createdAt,
-                updatedAt: data.updatedAt,
+                updatedAt: data.updatedAt
             };
             commodity.push(item);
         }

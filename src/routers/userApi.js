@@ -205,7 +205,7 @@ router.delete('/api/users/me/avatar', authToken, async (req, res) => {
         await req.user.save();
         res.send(); 
     } catch (e) {
-        res.status(500).send();
+        res.status(500).send(e);
     }
 });
 

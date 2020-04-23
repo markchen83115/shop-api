@@ -104,7 +104,7 @@ router.delete('/api/commodity/:commodityId', authToken, async (req, res) => {
         }
         res.send(commodity);
     } catch (e) {
-        res.status(500).send();
+        res.status(500).send(e);
     }
 });
 
@@ -121,11 +121,9 @@ router.get('/api/commodityAll', cacheAllCommodity, async (req, res) => {
     }
 
     try {
-
         if (req.commodity) {
             return res.send(req.commodity);
         }
-
 
         const commodity = await Commodity.find(
             {}, // 搜索全部的商品
@@ -136,9 +134,9 @@ router.get('/api/commodityAll', cacheAllCommodity, async (req, res) => {
                 sort 
             }).exec();
 
-        // 傳送data到redis
+        // 傳送data到Redis
         // 商品總數
-        client.setex("numCommodity", 30, `${commodity.length}`);
+        client.setex("numCommodity", 5 * 60, `${commodity.length}`);
         // 每個商品資料
         for (let i = 0, length = commodity.length; i < length; i ++) { 
             client.hmset(`commodity:${i}`,
@@ -150,9 +148,9 @@ router.get('/api/commodityAll', cacheAllCommodity, async (req, res) => {
                 "stock", `${commodity[i].stock}`,
                 "owner", `${commodity[i].owner}`,
                 "createdAt", `${commodity[i].createdAt}`,
-                "updatedAt", `${commodity[i].updatedAt}`,
+                "updatedAt", `${commodity[i].updatedAt}`
             );
-            client.expire(`commodity:${i}`, 30);
+            client.expire(`commodity:${i}`, 5 * 60);
         }
         res.send(commodity);
     } catch (e) {
@@ -163,7 +161,7 @@ router.get('/api/commodityAll', cacheAllCommodity, async (req, res) => {
 // 取得user的所有商品
 // GET /commodityAll?limit=10&skip=0
 // GET /commodityAll?sortBy=createdAt:desc
-router.get('/api/commodityUser/', authToken, async (req, res) => {
+router.get('/api/commodityUser', authToken, async (req, res) => {
     const sort = {};
 
     if (req.query.sortBy) {
