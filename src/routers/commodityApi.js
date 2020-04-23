@@ -132,9 +132,9 @@ router.get('/api/commodityAll', cacheAllCommodity, async (req, res) => {
 
         // 如果沒有query要求 將資料存入Redis
         if (!req.query) {
-            // 商品總數
+            // 儲存商品總數
             client.setex("numCommodity", 5 * 60, `${commodity.length}`);
-            // 每個商品資料
+            // 儲存每個商品資料
             for (let i = 0, length = commodity.length; i < length; i ++) { 
                 client.hmset(`commodity:${i}`,
                     "description", `${commodity[i].description}`,
