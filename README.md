@@ -4,6 +4,9 @@
 
 後端使用Node.js, Express, MongoDB, Redis, JsonWebToken, OAuth 2.0 建構API與Database
 
+## Demo
+[https://markchen-shopping-web.herokuapp.com/](https://markchen-shopping-web.herokuapp.com/)
+
 <h2 id='directory'>目錄</h2>
 
 + [前端](#frontend)
