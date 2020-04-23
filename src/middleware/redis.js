@@ -2,7 +2,7 @@ const redis = require('redis');
 const asyncRedis = require('async-redis');
 const mongoose = require('mongoose');
 
-const client = redis.createClient(process.env.REDIS_URL);
+const client = redis.createClient(process.env.REDISCLOUD_URL, { no_ready_check: true });
 const asyncRedisClient = asyncRedis.decorate(client);
 
 // cache middleware - all commodity
