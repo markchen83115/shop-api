@@ -148,7 +148,6 @@ deleteCartButton.addEventListener('click', async (e) => {
     e.preventDefault();
 
     // 先disable button
-    deleteSingleItem.disabled = true;
     purchaseButton.disabled = true;
     deleteCartButton.disabled = true;
 
@@ -161,7 +160,6 @@ deleteCartButton.addEventListener('click', async (e) => {
         }
     });
 
-    deleteSingleItem.disabled = false;
     purchaseButton.disabled = false;
     deleteCartButton.disabled = false;
 
@@ -230,15 +228,14 @@ cartForm.addEventListener('submit', async (e) => {
             return document.location.href="/userUnauthorized";
         } else if (responseOrder.status !== 201) { // error
             console.log(order)
-            if (cartList.name === 'MongoError') {
-                alert(cartList.errmsg);
-            } else if (cartList.name === 'ValidationError') {
-                alert(cartList.message)
+            if (order.name === 'MongoError') {
+                alert(order.errmsg);
+            } else if (order.name === 'ValidationError') {
+                alert(order.message)
             } else {
-                alert(cartList.error);
+                alert(order.error);
             }
         } else { //成功 status(201)
-            console.log(order)
             alert('成功訂購');
             return document.location.href="/order";
         }
