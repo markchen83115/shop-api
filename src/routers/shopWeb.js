@@ -47,6 +47,7 @@ router.get('/commodity/:commodityId', async (req, res) => {
     const _id = req.params.commodityId;
     const options = {
         url: `https://markchen-shopping-web.herokuapp.com/api/commodity/${_id}`,
+        // url: `http://localhost:3000/api/commodity/${_id}`,
         json: true
     };
     const commodity = await rp(options);
@@ -57,6 +58,7 @@ router.get('/commodityMod/:commodityId', async (req, res) => {
     const _id = req.params.commodityId;
     const options = {
         url: `https://markchen-shopping-web.herokuapp.com/api/commodity/${_id}`,
+        // url: `http://localhost:3000/api/commodity/${_id}`,
         json: true
     };
     const commodity = await rp(options);

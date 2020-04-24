@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const Order = require('../models/order');
 const Cart = require('../models/cart');
 const Commodity = require('../models/commodity');
@@ -7,12 +8,15 @@ const authToken = require('../middleware/authToken');
 const router = new express.Router();
 
 router.post('/api/order', authToken, async (req, res) => {
+    // transactions
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         let orderItem = [];
 
         // 先讀取每個commodityId 取得commdity最新資料
         for (let i = 0, len = req.body.items.length; i < len; i++) {
-            const commodity = await Commodity.findById(req.body.items[i].commodityId);
+            const commodity = await Commodity.findById(req.body.items[i].commodityId, null, { session });
 
             // 商品是否已下架
             if (!commodity) {
@@ -35,9 +39,9 @@ router.post('/api/order', authToken, async (req, res) => {
 
         // 更新商品庫存 扣除被下單的數量
         for (let i = 0, len = req.body.items.length; i < len; i++) {
-            const commodity = await Commodity.findById(req.body.items[i].commodityId);
+            const commodity = await Commodity.findById(req.body.items[i].commodityId, null, { session });
             commodity.stock -=  Number(req.body.items[i].quantity);
-            await commodity.save();
+            await commodity.save({ session });
         }
 
         // 新增order
@@ -45,14 +49,20 @@ router.post('/api/order', authToken, async (req, res) => {
             userId: req.user._id,
             orderItem: orderItem
         });
-        await order.save();
+        await order.save({ session });
 
         // order儲存後 將購物車刪除
-        await Cart.deleteOne({ userId: req.user._id });
+        await Cart.deleteOne({ userId: req.user._id }, { session });
 
+        await session.commitTransaction();
+        session.endSession();
         res.status(201).send(order);
 
     } catch (e) {
+        // If an error occurred, abort the whole transaction
+        await session.abortTransaction();
+        session.endSession();
+        console.log(e);
         res.status(400).send(e);
     }
 });

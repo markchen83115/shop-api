@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const client = redis.createClient(process.env.REDIS_URL);
 const asyncRedisClient = asyncRedis.decorate(client);
 
+//brew services start redis
+
 // cache middleware - all commodity
 const cacheAllCommodity = async (req, res, next) => {
     try {
