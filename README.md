@@ -2,10 +2,11 @@
 ---
 前端使用HTML, CSS, JavaScript 展示由API得到的資料 
 
-後端使用Node.js, Express, MongoDB, Redis, JsonWebToken, OAuth 2.0 建構API與Database
+後端使用Node.js, Express, MongoDB, Redis, JsonWebToken, OAuth 2.0 建構RESTful API與Database
 
 ## Demo
 [https://markchen-shopping-web.herokuapp.com/](https://markchen-shopping-web.herokuapp.com/)
+![1](https://github.com/markchen83115/shop-api/blob/master/shopping%20website.png)
 
 <h2 id='directory'>目錄</h2>
 
